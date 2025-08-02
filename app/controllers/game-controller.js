@@ -35,3 +35,56 @@ exports.getLeaderboard = async (req, res) => {
     });
   }
 };
+
+// HÀM MỚI: Controller để lưu/cập nhật state
+exports.saveState = async (req, res) => {
+  try {
+    const userId = req.userId;
+    // Lấy toàn bộ object game state từ body
+    const gameStateData = req.body;
+
+    // Kiểm tra dữ liệu cơ bản
+    if (!gameStateData || !gameStateData.board) {
+      return res.status(400).json({ message: "Invalid game state data." });
+    }
+
+    const savedState = await gameService.saveOrUpdateGameState(
+      userId,
+      gameStateData
+    );
+    res.status(200).json({ message: "Game state saved.", data: savedState });
+  } catch (error) {
+    res
+      .status(500)
+      .json({ message: "Error saving game state", error: error.message });
+  }
+};
+
+// HÀM MỚI: Controller để tải state
+exports.loadState = async (req, res) => {
+  try {
+    const userId = req.userId;
+    const gameState = await gameService.getGameState(userId);
+    if (!gameState) {
+      return res.status(404).json({ message: "No saved game state found." });
+    }
+    res.status(200).json(gameState);
+  } catch (error) {
+    res
+      .status(500)
+      .json({ message: "Error loading game state", error: error.message });
+  }
+};
+
+// HÀM MỚI: Controller để xóa state (restart)
+exports.deleteState = async (req, res) => {
+  try {
+    const userId = req.userId;
+    await gameService.deleteGameState(userId);
+    res.status(200).json({ message: "Game state deleted successfully." });
+  } catch (error) {
+    res
+      .status(500)
+      .json({ message: "Error deleting game state", error: error.message });
+  }
+};

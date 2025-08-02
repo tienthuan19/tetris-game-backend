@@ -2,6 +2,7 @@ const db = require("../models");
 const sequelize = db.sequelize;
 const Score = db.scores;
 const Account = db.accounts;
+const GameState = db.gamestates;
 
 exports.saveScore = async ({ userId, score }) => {
   // Kiểm tra xem người dùng có tồn tại không
@@ -51,4 +52,37 @@ exports.fetchLeaderboard = async () => {
   }));
 
   return formattedLeaderboard;
+};
+
+// HÀM MỚI: Lưu hoặc cập nhật trạng thái game
+exports.saveOrUpdateGameState = async (userId, gameStateData) => {
+  // Dùng hàm findOrCreate của Sequelize cho logic "upsert"
+  // Nó sẽ tìm một bản ghi với userId này.
+  // Nếu tìm thấy, nó sẽ không làm gì. Nếu không, nó sẽ tạo mới.
+  const [gameState] = await GameState.findOrCreate({
+    where: { userId: userId },
+    defaults: gameStateData, // Dữ liệu để tạo mới nếu không tìm thấy
+  });
+
+  // Sau khi đảm bảo bản ghi đã tồn tại, chúng ta cập nhật nó
+  await gameState.update(gameStateData);
+
+  return gameState;
+};
+
+// HÀM MỚI: Lấy trạng thái game đã lưu
+exports.getGameState = async (userId) => {
+  const gameState = await GameState.findOne({
+    where: { userId: userId },
+  });
+  return gameState;
+};
+
+// HÀM MỚI: Xóa trạng thái game đã lưu
+exports.deleteGameState = async (userId) => {
+  const result = await GameState.destroy({
+    where: { userId: userId },
+  });
+  // result sẽ là 1 nếu xóa thành công, 0 nếu không có gì để xóa
+  return result;
 };
