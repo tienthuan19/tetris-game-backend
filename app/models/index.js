@@ -1,6 +1,5 @@
 const { Sequelize, DataTypes } = require("sequelize");
 const config = require("../config/database");
-const Account = require("./account-model");
 
 // Tạo instance Sequelize
 const sequelize = new Sequelize(
@@ -24,16 +23,12 @@ const sequelize = new Sequelize(
   }
 );
 
-sequelize
-  .sync({ alter: true }) // hoặc force: true
-  .then(() => {
-    console.log("✅ Synced DB!");
-  })
-  .catch((err) => {
-    console.error("❌ Failed to sync DB:", err);
-  });
+const Account = require("./account-model")(sequelize, DataTypes);
 
-module.exports = {
+const db = {
   sequelize,
+  Sequelize,
   Account,
 };
+
+module.exports = db;
