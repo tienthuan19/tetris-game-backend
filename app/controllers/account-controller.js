@@ -30,6 +30,8 @@ exports.login = async (req, res) => {
   try {
     const { username, password } = req.body;
     const result = await accountService.login({ username, password });
+    // Đặt token vào header
+    res.setHeader("Authorization", "Bearer " + result.token);
     res.status(200).json({ message: "Login successful", ...result });
   } catch (err) {
     res.status(401).json({ message: "Login failed", error: err.message });

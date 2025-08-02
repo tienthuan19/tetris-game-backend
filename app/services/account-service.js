@@ -3,7 +3,7 @@ const bcrypt = require("bcrypt");
 const sequelize = require("../models");
 const Account = sequelize.Account;
 
-const SECRET_KEY = process.env.JWT_SECRET || "secret123";
+const SECRET_KEY = process.env.JWT_SECRET;
 
 exports.isUsernameExited = async (username) => {
   const existing = await Account.findOne({ where: { username } });

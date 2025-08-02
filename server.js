@@ -4,7 +4,7 @@ const app = express();
 const BodyParser = require("body-parser");
 const MethodOverride = require("method-override");
 require("dotenv").config();
-const port = process.env.PORT || 8081;
+const port = process.env.PORT || 3000;
 const hostname = process.env.HOST_NAME || "localhost";
 
 // parse application/json
