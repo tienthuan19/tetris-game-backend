@@ -22,3 +22,16 @@ exports.saveScore = async (req, res) => {
       .json({ message: "Error saving score", error: error.message });
   }
 };
+
+// HÀM MỚI: Controller cho leaderboard
+exports.getLeaderboard = async (req, res) => {
+  try {
+    const leaderboard = await gameService.fetchLeaderboard();
+    res.status(200).json(leaderboard);
+  } catch (error) {
+    res.status(500).json({
+      message: "Error fetching leaderboard",
+      error: error.message,
+    });
+  }
+};
