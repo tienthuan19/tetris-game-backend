@@ -38,14 +38,14 @@ exports.login = async (req, res) => {
   }
 };
 
-exports.getOne = async (req, res) => {
-  console.log("hello");
-};
+// exports.getOne = async (req, res) => {
+//   console.log("hello");
+// };
 
-exports.getAll = (req, res) => {
-  console.log("hello");
-};
+// exports.getAll = (req, res) => {
+//   console.log("hello");
+// };
 
-exports.deleteOne = (req, res) => {
-  console.log("hello");
-};
+// exports.deleteOne = (req, res) => {
+//   console.log("hello");
+// };
