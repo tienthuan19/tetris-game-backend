@@ -1,7 +1,8 @@
 const jwt = require("jsonwebtoken");
 const bcrypt = require("bcrypt");
-const sequelize = require("../models");
-const Account = sequelize.Account;
+const db = require("../models");
+const Account = db.accounts; // Lấy model 'accounts' từ đối tượng db
+const Score = db.Scores;
 
 exports.isUsernameExited = async (username) => {
   const existing = await Account.findOne({ where: { username } });

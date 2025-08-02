@@ -1,16 +1,5 @@
 const { Sequelize, DataTypes } = require("sequelize");
 const config = require("../config/database");
-const database = require("../models");
-// ...
-// db.sequelize.sync({ force: true }) // Dùng khi muốn xóa và tạo lại bảng (mất dữ liệu)
-database.sequelize
-  .sync() // Chỉ tạo bảng nếu chưa tồn tại
-  .then(() => {
-    console.log("Synced db.");
-  })
-  .catch((err) => {
-    console.log("Failed to sync db: " + err.message);
-  });
 
 // Tạo instance Sequelize
 const sequelize = new Sequelize(
@@ -39,8 +28,8 @@ db.Sequelize = Sequelize;
 db.sequelize = sequelize;
 
 // Import các models
-db.accounts = require("./account-model.js")(sequelize, DataTypes);
-db.scores = require("./score-model.js")(sequelize, DataTypes); // <-- Import Score model
+db.accounts = require("../models/account-model.js")(sequelize, DataTypes);
+db.scores = require("../models/score-model.js")(sequelize, DataTypes); // <-- Import Score model
 
 // Định nghĩa mối quan hệ
 // Một Account có thể có nhiều Score

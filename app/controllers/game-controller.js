@@ -1,6 +1,6 @@
 const gameService = require("../services/game-service");
 
-exports.savePlayerScore = async (req, res) => {
+exports.saveScore = async (req, res) => {
   try {
     // userId được middleware verifyToken thêm vào req
     const userId = req.userId;

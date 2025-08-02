@@ -38,12 +38,24 @@ app.use(express.urlencoded({ extended: true }));
 
 // >>>>>>>>>>>>>> Auth Middleware <<<<<<<<<<<<<<
 // Auth middleware: Chỉ áp dụng cho những route bắt đầu bằng /api/v1/auth
-app.use("/api/v1/auth", require("./app/middlewares/auth-middelwares"));
+// app.use("/api/v1/auth", require("./app/middlewares/auth-middelwares"));
 
 // >>>>>>>>>>>>>>>>>> Routes <<<<<<<<<<<<<<<<
 require("./app/route")(app);
 
 require("./app/models");
+
+const database = require("./app/models/index");
+// ...
+// db.sequelize.sync({ force: true }) // Dùng khi muốn xóa và tạo lại bảng (mất dữ liệu)
+database.sequelize
+  .sync() // Chỉ tạo bảng nếu chưa tồn tại
+  .then(() => {
+    console.log("Synced db.");
+  })
+  .catch((err) => {
+    console.log("Failed to sync db: " + err.message);
+  });
 
 app.listen(3000, hostname, () => {
   console.log(`✅ Server running at http://${hostname}:${port}`);
