@@ -4,7 +4,16 @@ exports.register = async (req, res) => {
   try {
     const { username, password } = req.body;
 
-    const newAccount = await accountService.register({ username, password });
+    const isExited = await accountService.isUsernameExited(username);
+    if (isExited) {
+      throw new Error("Username exited");
+    }
+
+    const hashedPassword = await accountService.hashingPassword(password);
+    const newAccount = await accountService.createAccount(
+      username,
+      hashedPassword
+    );
     res.status(201).json({
       message: "Register success!",
       data: newAccount,
@@ -17,8 +26,14 @@ exports.register = async (req, res) => {
   }
 };
 
-exports.login = (req, res) => {
-  console.log("hello");
+exports.login = async (req, res) => {
+  try {
+    const { username, password } = req.body;
+    const result = await accountService.login({ username, password });
+    res.status(200).json({ message: "Login successful", ...result });
+  } catch (err) {
+    res.status(401).json({ message: "Login failed", error: err.message });
+  }
 };
 
 exports.getOne = async (req, res) => {
