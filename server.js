@@ -4,7 +4,7 @@ const app = express();
 const BodyParser = require("body-parser");
 const MethodOverride = require("method-override");
 require("dotenv").config();
-const port = process.env.PORT || 3000;
+const port = process.env.PORT;
 const hostname = process.env.HOST_NAME || "localhost";
 
 // parse application/json
@@ -57,6 +57,6 @@ database.sequelize
     console.log("Failed to sync db: " + err.message);
   });
 
-app.listen(3000, hostname, () => {
+app.listen(port, hostname, () => {
   console.log(`✅ Server running at http://${hostname}:${port}`);
 });
