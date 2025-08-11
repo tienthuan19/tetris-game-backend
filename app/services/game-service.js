@@ -86,3 +86,35 @@ exports.deleteGameState = async (userId) => {
   // result sẽ là 1 nếu xóa thành công, 0 nếu không có gì để xóa
   return result;
 };
+
+// *** SỬA LẠI TOÀN BỘ HÀM NÀY ***
+exports.syncScores = async (userId, scores) => {
+  // Đổi tên hàm và tham số
+  if (!scores || scores.length === 0) {
+    return;
+  }
+
+  try {
+    const highestGuestScore = Math.max(...scores);
+
+    const userHighestScoreInDb = await Score.findOne({
+      where: { userId: userId }, // Sửa: Dùng accountId
+      order: [["score", "DESC"]],
+    });
+
+    const currentMaxScore = userHighestScoreInDb
+      ? userHighestScoreInDb.score
+      : 0;
+
+    if (highestGuestScore > currentMaxScore) {
+      await Score.create({
+        score: highestGuestScore,
+        userId: userId, // Sửa: Dùng accountId
+      });
+    }
+    return { message: "Sync completed." };
+  } catch (error) {
+    console.error("Error syncing scores:", error);
+    throw new Error("Could not sync scores.");
+  }
+};

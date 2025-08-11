@@ -30,7 +30,7 @@ db.sequelize = sequelize;
 // Import các models
 db.accounts = require("../models/account-model.js")(sequelize, DataTypes);
 db.scores = require("../models/score-model.js")(sequelize, DataTypes);
-db.gamestates = require("./gamestate-model.js")(sequelize, DataTypes);
+db.gamestates = require("../models/gamestate-model.js")(sequelize, DataTypes);
 
 // Định nghĩa mối quan hệ
 // Một Account có thể có nhiều Score

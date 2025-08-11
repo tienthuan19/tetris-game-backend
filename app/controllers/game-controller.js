@@ -88,3 +88,20 @@ exports.deleteState = async (req, res) => {
       .json({ message: "Error deleting game state", error: error.message });
   }
 };
+
+exports.syncScores = async (req, res) => {
+  try {
+    const userId = req.userId; // Lấy từ token đã được xác thực
+    const { scores } = req.body; // Lấy mảng điểm từ request body
+
+    if (!scores || !Array.isArray(scores)) {
+      return res.status(400).json({ message: "Dữ liệu không hợp lệ." });
+    }
+
+    await gameService.syncScores(userId, scores); // Đổi tên hàm ở đây
+    res.status(200).json({ message: "Đồng bộ điểm thành công." });
+  } catch (error) {
+    console.error("LỖI CONTROLLER SYNC:", error);
+    res.status(500).json({ message: "Lỗi máy chủ khi đồng bộ điểm." });
+  }
+};

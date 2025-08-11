@@ -7,15 +7,19 @@ module.exports = (app) => {
   //nếu đăng nhập xong thì lấy cái điểm từ localstorage lưu vào database
   app.get("/api/v1/game/leaderboard", gameController.getLeaderboard);
   // Lưu hoặc Cập nhật trạng thái game
-  app.post("/api/v1/auth/game/state", [authToken], gameController.saveState);
-
+  //app.post("/api/v1/auth/game/state", [authToken], gameController.saveState);
+  app.post(
+    "/api/v1/auth/game/score/sync",
+    [authToken],
+    gameController.syncScores
+  );
   // Lấy trạng thái game đã lưu
-  app.get("/api/v1/auth/game/state", [authToken], gameController.loadState);
+  //app.get("/api/v1/auth/game/state", [authToken], gameController.loadState);
 
   // Xóa trạng thái game (khi restart)
-  app.delete(
-    "/api/v1/auth/game/state",
-    [authToken],
-    gameController.deleteState
-  );
+  // app.delete(
+  //   "/api/v1/auth/game/state",
+  //   [authToken],
+  //   gameController.deleteState
+  // );
 };
