@@ -39,15 +39,3 @@ exports.login = async (req, res) => {
     res.status(401).json({ message: "Login failed", error: err.message });
   }
 };
-
-// exports.getOne = async (req, res) => {
-//   console.log("hello");
-// };
-
-// exports.getAll = (req, res) => {
-//   console.log("hello");
-// };
-
-// exports.deleteOne = (req, res) => {
-//   console.log("hello");
-// };

@@ -2,7 +2,7 @@ const gameService = require("../services/game-service");
 
 exports.saveScore = async (req, res) => {
   try {
-    // userId được middleware verifyToken thêm vào req
+    //Take userId from the authenticated request
     const userId = req.userId;
     const { score } = req.body;
 
@@ -23,7 +23,7 @@ exports.saveScore = async (req, res) => {
   }
 };
 
-// HÀM MỚI: Controller cho leaderboard
+// Get Leaderboard
 exports.getLeaderboard = async (req, res) => {
   try {
     const leaderboard = await gameService.fetchLeaderboard();
@@ -36,72 +36,20 @@ exports.getLeaderboard = async (req, res) => {
   }
 };
 
-// HÀM MỚI: Controller để lưu/cập nhật state
-exports.saveState = async (req, res) => {
-  try {
-    const userId = req.userId;
-    // Lấy toàn bộ object game state từ body
-    const gameStateData = req.body;
-
-    // Kiểm tra dữ liệu cơ bản
-    if (!gameStateData || !gameStateData.board) {
-      return res.status(400).json({ message: "Invalid game state data." });
-    }
-
-    const savedState = await gameService.saveOrUpdateGameState(
-      userId,
-      gameStateData
-    );
-    res.status(200).json({ message: "Game state saved.", data: savedState });
-  } catch (error) {
-    res
-      .status(500)
-      .json({ message: "Error saving game state", error: error.message });
-  }
-};
-
-// HÀM MỚI: Controller để tải state
-exports.loadState = async (req, res) => {
-  try {
-    const userId = req.userId;
-    const gameState = await gameService.getGameState(userId);
-    if (!gameState) {
-      return res.status(404).json({ message: "No saved game state found." });
-    }
-    res.status(200).json(gameState);
-  } catch (error) {
-    res
-      .status(500)
-      .json({ message: "Error loading game state", error: error.message });
-  }
-};
-
-// HÀM MỚI: Controller để xóa state (restart)
-exports.deleteState = async (req, res) => {
-  try {
-    const userId = req.userId;
-    await gameService.deleteGameState(userId);
-    res.status(200).json({ message: "Game state deleted successfully." });
-  } catch (error) {
-    res
-      .status(500)
-      .json({ message: "Error deleting game state", error: error.message });
-  }
-};
-
+// Sync Scores for the player that not logged in
 exports.syncScores = async (req, res) => {
   try {
-    const userId = req.userId; // Lấy từ token đã được xác thực
-    const { scores } = req.body; // Lấy mảng điểm từ request body
+    const userId = req.userId;
+    const { scores } = req.body;
 
     if (!scores || !Array.isArray(scores)) {
-      return res.status(400).json({ message: "Dữ liệu không hợp lệ." });
+      return res.status(400).json({ message: "Unvalid data!" });
     }
 
-    await gameService.syncScores(userId, scores); // Đổi tên hàm ở đây
-    res.status(200).json({ message: "Đồng bộ điểm thành công." });
+    await gameService.syncScores(userId, scores);
+    res.status(200).json({ message: "Success" });
   } catch (error) {
     console.error("LỖI CONTROLLER SYNC:", error);
-    res.status(500).json({ message: "Lỗi máy chủ khi đồng bộ điểm." });
+    res.status(500).json({ message: "Can't Sync." });
   }
 };

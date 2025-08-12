@@ -1,19 +1,21 @@
 const jwt = require("jsonwebtoken");
 const bcrypt = require("bcrypt");
 const db = require("../models");
-const Account = db.accounts; // Lấy model 'accounts' từ đối tượng db
-const Score = db.Scores;
+const Account = db.accounts;
 
+// Check if username already exists
 exports.isUsernameExited = async (username) => {
   const existing = await Account.findOne({ where: { username } });
   return existing;
 };
 
+// Hash the password
 exports.hashingPassword = async (password) => {
   const hashedPassword = await bcrypt.hash(password, 10);
   return hashedPassword;
 };
 
+// Create a new account
 exports.createAccount = async (username, hashedPassword) => {
   const newAccount = await Account.create({
     username,
@@ -26,6 +28,7 @@ exports.createAccount = async (username, hashedPassword) => {
   };
 };
 
+// Login function
 exports.login = async ({ username, password }) => {
   const user = await this.isUsernameExited(username);
   if (user === null) throw new Error("User not found");
@@ -41,22 +44,3 @@ exports.login = async ({ username, password }) => {
 
   return { token, user: { id: user.id, username: user.username } };
 };
-
-// exports.register = async ({ username, password }) => {
-//   const existing = await Account.findOne({ where: { username } });
-//   if (existing) {
-//     throw new Error("Username exited");
-//   }
-
-//   const hashedPassword = await bcrypt.hash(password, 10);
-
-//   const newAccount = await Account.create({
-//     username,
-//     password: hashedPassword,
-//   });
-
-//   return {
-//     id: newAccount.id,
-//     username: newAccount.username,
-//   };
-// };

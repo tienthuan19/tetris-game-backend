@@ -9,7 +9,6 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.INTEGER,
       allowNull: false,
     },
-    // Trường userId sẽ được Sequelize tự động thêm vào khi chúng ta định nghĩa mối quan hệ
   });
 
   return Score;

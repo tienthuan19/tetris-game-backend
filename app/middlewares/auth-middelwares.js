@@ -1,6 +1,8 @@
 // app/middlewares/auth-middelwares.js
 const jwt = require("jsonwebtoken");
 
+// Middleware to check if the user is authenticated
+// This middleware checks for a valid JWT token in the request headers
 module.exports = (req, res, next) => {
   const token = req.headers.authorization?.split(" ")[1];
 
@@ -10,7 +12,7 @@ module.exports = (req, res, next) => {
 
   try {
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
-    req.userId = decoded.id; // <-- SỬA DÒNG NÀY
+    req.userId = decoded.id;
     next();
   } catch (err) {
     return res

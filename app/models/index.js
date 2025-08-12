@@ -1,7 +1,6 @@
 const { Sequelize, DataTypes } = require("sequelize");
 const config = require("../config/database");
 
-// Tạo instance Sequelize
 const sequelize = new Sequelize(
   config.DBConnectors.database,
   config.DBConnectors.username,
@@ -27,32 +26,17 @@ const db = {};
 db.Sequelize = Sequelize;
 db.sequelize = sequelize;
 
-// Import các models
+//Import models
 db.accounts = require("../models/account-model.js")(sequelize, DataTypes);
 db.scores = require("../models/score-model.js")(sequelize, DataTypes);
-db.gamestates = require("../models/gamestate-model.js")(sequelize, DataTypes);
 
-// Định nghĩa mối quan hệ
-// Một Account có thể có nhiều Score
+// Define relationships
+// One Account can have many Scores
 db.accounts.hasMany(db.scores, { as: "scores" });
-// Một Score thuộc về một Account
+// Each Score belongs to one Account
 db.scores.belongsTo(db.accounts, {
   foreignKey: "userId", // Tên khóa ngoại trong bảng Scores
   as: "user",
-});
-
-// Định nghĩa quan hệ một-một
-// Mỗi Account có một GameState
-db.accounts.hasOne(db.gamestates, {
-  foreignKey: {
-    name: "userId",
-    unique: true, // Đảm bảo mỗi userId chỉ xuất hiện 1 lần
-    allowNull: false,
-  },
-});
-// Mỗi GameState thuộc về một Account
-db.gamestates.belongsTo(db.accounts, {
-  foreignKey: "userId",
 });
 
 module.exports = db;
