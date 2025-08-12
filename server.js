@@ -4,6 +4,9 @@ const app = express();
 const BodyParser = require("body-parser");
 const MethodOverride = require("method-override");
 require("dotenv").config();
+const swaggerUi = require("swagger-ui-express");
+const swaggerSpec = require("./app/config/swagger");
+
 const port = process.env.PORT;
 const hostname = process.env.HOST_NAME || "localhost";
 
@@ -36,18 +39,15 @@ app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-// >>>>>>>>>>>>>> Auth Middleware <<<<<<<<<<<<<<
-// Auth middleware: Chỉ áp dụng cho những route bắt đầu bằng /api/v1/auth
-// app.use("/api/v1/auth", require("./app/middlewares/auth-middelwares"));
+// >>>>>>>>>>>>>>>>>> Swagger UI <<<<<<<<<<<<<<<<
+app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 
-// >>>>>>>>>>>>>>>>>> Routes <<<<<<<<<<<<<<<<
+// >>>>>>>>>>>>>>>>>>>> Routes <<<<<<<<<<<<<<<<<<<<<
 require("./app/route")(app);
 
 require("./app/models");
 
 const database = require("./app/models/index");
-// ...
-// db.sequelize.sync({ force: true }) // Dùng khi muốn xóa và tạo lại bảng (mất dữ liệu)
 database.sequelize
   .sync() // Chỉ tạo bảng nếu chưa tồn tại
   .then(() => {
