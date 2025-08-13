@@ -5,7 +5,6 @@ const options = {
     openapi: "3.0.0",
     info: {
       title: "Tetris Game Backend API",
-      version: "1.0.0",
       description: "API documentation for the Tetris game backend.",
     },
     servers: [
