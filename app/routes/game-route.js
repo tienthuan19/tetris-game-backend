@@ -34,21 +34,9 @@ module.exports = (app) => {
    *               properties:
    *                 message:
    *                   type: string
-   *                   example: Score saved successfully!
+   *                   example: Score saved
    *                 data:
    *                   $ref: '#/components/schemas/Score'
-   *       "400":
-   *         description: Bad request, for example, if the score is not provided.
-   *         content:
-   *           application/json:
-   *             schema:
-   *               $ref: '#/components/schemas/Error'
-   *       "401":
-   *         description: Unauthorized, if the token is invalid or not provided.
-   *         content:
-   *           application/json:
-   *             schema:
-   *               $ref: '#/components/schemas/Error'
    *       "500":
    *         description: Internal server error.
    *         content:
@@ -121,12 +109,6 @@ module.exports = (app) => {
    *                   example: Success
    *       "400":
    *         description: Bad request, for example, if the scores are not provided in the correct format.
-   *         content:
-   *           application/json:
-   *             schema:
-   *               $ref: '#/components/schemas/Error'
-   *       "401":
-   *         description: Unauthorized, if the token is invalid or not provided.
    *         content:
    *           application/json:
    *             schema:

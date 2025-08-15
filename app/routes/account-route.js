@@ -77,7 +77,7 @@ module.exports = (app) => {
    *         description: Login successful.
    *         headers:
    *           Authorization:
-   *             description: "The JWT token, with 'Bearer ' prefix."
+   *             description: "Bearer + {token}"
    *             schema:
    *               type: string
    *         content:

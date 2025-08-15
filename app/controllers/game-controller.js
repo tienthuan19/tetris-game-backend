@@ -13,7 +13,7 @@ exports.saveScore = async (req, res) => {
     const savedScore = await gameService.saveScore({ userId, score });
 
     res.status(201).json({
-      message: "Score saved successfully!",
+      message: "Score saved",
       data: savedScore,
     });
   } catch (error) {

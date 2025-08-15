@@ -2,7 +2,6 @@ const db = require("../models");
 const sequelize = db.sequelize;
 const Score = db.scores;
 const Account = db.accounts;
-const GameState = db.gamestates;
 
 //Save player score
 exports.saveScore = async ({ userId, score }) => {
